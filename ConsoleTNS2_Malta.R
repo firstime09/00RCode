@@ -11,8 +11,8 @@ lidline2_44 <- readLAS ("LINE_1_1.las")
 plot(lidline2_44)
 
 ## make DTM and normalization
-dtmN <- grid_terrain(lidline2_44, 0.5, kriging(k=10L))
-lasN <- lasnormalize(lidline2_44, dtmN, na.rm = TRUE)
+#dtmN <- grid_terrain(lidline2_44, 0.5, kriging(k=10L))
+#lasN <- lasnormalize(lidline2_44, dtmN, na.rm = TRUE)
 ##
 dtm2_44 <- grid_terrain(lidline2_44, res = 0.5, algorithm = kriging(k = 10L))
 plot(dtm2_44)
@@ -47,7 +47,7 @@ unique(lidline2_44_trim@data$Classification)
 table(lidline2_44_trim@data$Classification)
 
 ## filter classification <- tidak dikerjakan
-lidline5_1_filtclas <- lasfilter(lidline5_1_trim, Classification > 2)
+lidline5_1_filtclas <- lasfilter(lidline2_44_trim, Classification > 2)
 unique(lidline5_1_filtclas@data$Classification)
 table(lidline5_1_filtclas@data$Classification)
 
@@ -56,16 +56,20 @@ lidline2_44_trim@data$ID <- 1:nrow(lidline2_44_trim@data)
 names(lidline2_44_trim@data)
 
 # save data .rds
-saveRDS(lidline2_44_trim, "fn_line2.44.RDS")
+setwd('D:/00RCode/Result')
+saveRDS(lidline2_44_trim, "fn_line2.44.RDS") # Fix 20-02-2019
 
 ## Membuat CHM dan Smoothing
-chm2_44 <- grid_canopy(lidline2_44_trim, res = 0.5, subcircle = 0.3, na.fill = "knnidw", k=5, p=2)
+#chm2_44 <- grid_canopy(lidline2_44_trim, res = 0.5, subcircle = 0.3, na.fill = "knnidw", k=5, p=2)
+chm2_44 <- grid_canopy(lidline2_44_trim, res = 0.5, p2r(subcircle = 0.3, na.fill = knnidw(k=5, p=2)))
 plot(chm2_44)
-rchm <- as.raster(chm2_44)
+rchm <- raster::as.raster(chm2_44) # Fix 20-02-2019
+df <- as.data.frame(as.matrix(rchm1))
 
 ## Membuat raster CHM
 library(raster)
-writeRaster(rchm, filename = "chm_line2.44.tif")
+ras1 <- writeRaster(chm2_44, filename = "test.tif")
+rchmras2 <- writeRaster(rchm, filename = "chm_line2.44.tif", format = "GTiff", overwrite = TRUE, NAflag)
 
 # LiDAR metric ----
 metrik_arci <- function(rn, nr, cls, z, h) # first return canopy index
