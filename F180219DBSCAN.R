@@ -1,4 +1,5 @@
 library(dbscan)
+library(openxlsx)
 library(readxl)
 library(dplyr)
 library(e1071)
@@ -34,12 +35,13 @@ file1 <- read_xlsx('Pegunungan_Sumatera.xlsx')
 setwd('C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/')
 setwd('D:/00RCode/Result/')
 file <- read_xlsx('580_CIDANAU_190219.xlsx')
+file2 <- read_xlsx('CIDANAU580_MinMax.xlsx') #-------------- Data Normalisasi Min_Max
 #----------------------------------------------------------- Load and Selection Dataframe
 dframe <- file[, c(5,7,8,9,10,11,12)]
-dfx <- file[, c("Band_2", "Band_3", "Band_4", "Band_5", "Band_6", "Band_7")]
-dfy <- file[, c("frci")]
-dfxy <- file[, c("Band_7", "frci")]
-dfyx <- file[, c("frci", "Band_7")]
+dfx <- file2[, c("Band_2", "Band_3", "Band_4", "Band_5", "Band_6", "Band_7")]
+dfy <- file2[, c("frci")]
+dfxy <- file2[, c("Band_7", "frci")]
+dfyx <- file2[, c("frci", "Band_7")]
 #----------------------------------------------------------------------------------------
 get_index1 <- func(dframe$Band_4)
 get_index2 <- rbf.gauss(dframe$Band_4)
@@ -66,3 +68,21 @@ plot(file$Band_7, col = fileCluster$cluster, title("Center = 3, Nstart = 10"))
 
 plot(file$Band_7, title("dfxy"))
 plot(dfyx, col = fileCluster$cluster, title("Center = 3, Nstart = 25"))
+
+#------------------------------------------------------------------------------ 22/02-2019
+pca_test1 <- prcomp(dfx, scale. = FALSE)
+pca_test2 <- prcomp(dfx, scale. = TRUE)
+summary(pca_test1)
+
+loadDF_PCA1 <- pca_test1$x
+a <- round(loadDF_PCA1, 3)
+dfPCA1 <- data.frame(dfy, a)
+
+loadDF_PCA2 <- pca_test2$x
+b <- round(loadDF_PCA2, 3)
+dfPCA2 <- data.frame(dfy, b)
+
+setwd('D:/00RCode/Result/')
+write_xlsx <- write.xlsx(dfPCA2, file = "Cidanau_MinMax_ScalePCA.xlsx")
+
+
