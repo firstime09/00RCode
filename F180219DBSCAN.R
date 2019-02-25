@@ -14,6 +14,11 @@ normZ <- function(x){
   return(prt2)
 }
 
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
+
 rbf.gauss <- function(gamma=1.0) {
   
   function(x) {
@@ -34,7 +39,7 @@ file1 <- read_xlsx('Pegunungan_Sumatera.xlsx')
 #--------------------------------------------------------------------------- DATA CIDANAU
 setwd('C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/')
 setwd('D:/00RCode/Result/')
-file <- read_xlsx('580_CIDANAU_190219.xlsx')
+file <- read_xlsx('Cidanau_Data_300Yoga.xlsx')
 file2 <- read_xlsx('CIDANAU580_MinMax.xlsx') #-------------- Data Normalisasi Min_Max
 #----------------------------------------------------------- Load and Selection Dataframe
 dframe <- file[, c(5,7,8,9,10,11,12)]
@@ -82,7 +87,41 @@ loadDF_PCA2 <- pca_test2$x
 b <- round(loadDF_PCA2, 3)
 dfPCA2 <- data.frame(dfy, b)
 
+#------------------------------------------------------------------------------ 25/02-2019
+set.seed(25)
+kNNdistplot(dfx, k = 5)
+abline(h=.10, col = "red", lty=2)
+
+dbfilter <- dbscan(dfx, eps = .10, minPts = 5)
+dbfilter
+pairs(dfx, col = dbfilter$cluster + 1L)
+file2$cluster <- dbfilter$cluster
+cleanall <- file2 %>% filter(cluster > 0)
+
+par(mfrow=c(1,2))
+plot(file2$Band_4, file2$frci)
+plot(cleanall$Band_4, cleanall$frci)
+
+plot(file2$Band_7, file2$frci)
+plot(cleanall$Band_7, cleanall$frci)
+
+#------------------------------------------------------------------------------ 25/02-2019
+#------------------------------------------------------------------------------ SVR Model
+## Data Selection and Split data train and test
+set.seed(3033)
+intrain <- createDataPartition(y = cleanall$frci, p= 0.7, list = FALSE)
+training <- cleanall[intrain,]
+testing <- cleanall[-intrain,]
+
+## Model and Prediction data training, testing
+model <- svm(frci ~ . , training)
+predictedY <- predict(model, testing)
+
+error <- testing$frci - predictedY  # 
+svrPredictionRMSE <- rmse(error)  #  
+
+
 setwd('D:/00RCode/Result/')
-write_xlsx <- write.xlsx(dfPCA2, file = "Cidanau_MinMax_ScalePCA.xlsx")
+write_xlsx <- write.xlsx(cleanall, file = "Cidanau_MinMax_DBSCAN.xlsx")
 
 

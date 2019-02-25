@@ -3,6 +3,7 @@ library(openxlsx)
 library(readxl)
 
 setwd('D:/00RCode/Result/')
+setwd('')
 file <- read_xlsx('580_CIDANAU_190219.xlsx')
 dframe <- file[, c("frci", "Band_2", "Band_3", "Band_4", "Band_5", "Band_6", "Band_7")]
 
