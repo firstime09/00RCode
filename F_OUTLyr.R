@@ -23,6 +23,7 @@ addDF0 <- (dframe00["Band_4New"] = DF_B4)
 
 dropsDF <- c("FID", "Shape", "kategori", "Band_1", "Band_9")
 NewDF <- dframe00[ , !(names(dframe00) %in% dropsDF)] # Drop dataframe based columns
+
 NewDF1 <- NewDF[ !(NewDF$Band_4New %in% c(NA)), ] # Drop dataframe based row
 NewDF2 <- NewDF %>% filter(class=="Clas_Name_Select")# Select spesific row
 
