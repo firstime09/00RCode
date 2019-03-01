@@ -43,9 +43,9 @@ par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
 plot(dataSample$Band_4, dataSample$frci)
 
-# setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
-# write.xlsx(cleanall, file = "FRCI_LINE10_46.21.xlsx")
-# write.csv(cleanall, file = "FRCI_LINE10_46.21.csv")
+setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
+write.xlsx(cleanall, file = "FRCI_LINE10_45.22.xlsx")
+write.csv(cleanall, file = "FRCI_LINE10_45.22.csv")
 ## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
