@@ -6,13 +6,14 @@ library(Boruta)
 library(caret)
 library(raster)
 library(dismo)
+library(openxlsx)
 # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
 setwd("D:/00RCode/Result/Data Sumatera")
-file =read_excel("FRCI_Line_7.xlsx")
+file =read_excel("FRCI_LINE10.xlsx")
 # file =read.csv("FRCI_Line_6.csv")
 head(file)
-dataall <- file[,-c(3,10)] ## Drop column in dataframe
-data<-file[,-c(3,10)] ## Drop column in dataframe
+dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+data<-file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
 head(data)
 
 number <-data %>%
@@ -42,9 +43,9 @@ par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
 plot(dataSample$Band_4, dataSample$frci)
 
-setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
-write.xlsx(cleanall, file = "FRCI_Line_7_Sumatera_78.13N.xlsx")
-write.csv(cleanall, file = "FRCI_Line_7_Sumatera_78.13N.csv")
+# setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
+# write.xlsx(cleanall, file = "FRCI_LINE10_46.21.xlsx")
+# write.csv(cleanall, file = "FRCI_LINE10_46.21.csv")
 ## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
@@ -84,8 +85,11 @@ svrPredictionRMSE <- rmse(error)  #
 
 tuneResult <- tune(svm, frci ~ .,  data = training,
                    ranges = list(epsilon = seq(0,1,0.1), cost = 2^(2:9)))
-print(tuneResult) 
-plot(tuneResult)
+
+# tuneResult <- tune(svm, frci ~ .,  data = training,
+#                    ranges = list(epsilon = 0.01, cost = 10))
+# print(tuneResult) 
+# plot(tuneResult)
 
 tunedModel <- tuneResult$best.model
 tunedModelY <- predict(tunedModel, testing)
@@ -111,5 +115,4 @@ ss_residuals <- sum((df$testing.frci - df$tunedModelY)^2)
 
 # 3. R2 Score
 r2 <- 1 - ss_residuals / ss_total
-
 
