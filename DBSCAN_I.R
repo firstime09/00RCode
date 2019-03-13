@@ -8,12 +8,12 @@ library(raster)
 library(dismo)
 library(openxlsx)
 # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
-setwd("D:/00RCode/Result/Data Sumatera")
-file =read_excel("FRCI_LINE10.xlsx")
+setwd("C:/Users/Felix/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/")
+file =read_excel("Data_1048_Yoga.xlsx")
 # file =read.csv("FRCI_Line_6.csv")
 head(file)
-dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
-data<-file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+dataall <- file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
+data<-file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
 head(data)
 
 number <-data %>%
@@ -23,7 +23,7 @@ sample <-data%>%
   group_by(Class)%>%
   sample_n(min(number$`n()`))
 head(sample)
-sample<-sample[-2] ## For remove column Class
+sample<-sample[-1] ## For remove column Class
 
 
 head(sample)
@@ -43,14 +43,14 @@ par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
 plot(dataSample$Band_4, dataSample$frci)
 
-setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
-write.xlsx(cleanall, file = "FRCI_LINE10_45.22.xlsx")
-write.csv(cleanall, file = "FRCI_LINE10_45.22.csv")
+#setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
+#write.xlsx(cleanall, file = "FRCI_LINE10_45.22.xlsx")
+#write.csv(cleanall, file = "FRCI_LINE10_45.22.csv")
 ## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
 head(svrdata)
-library(Boruta)
+#library(Boruta)
 # Decide if a variable is important or not using Boruta
 boruta_output <- Boruta(frci ~ ., data=na.omit(svrdata), doTrace=2)  # perform Boruta search
 boruta_signif <- names(boruta_output$finalDecision[boruta_output$finalDecision %in% ("Confirmed")])  # collect Confirmed and Tentative variables
