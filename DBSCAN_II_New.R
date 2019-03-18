@@ -9,7 +9,8 @@ library(dismo)
 library(openxlsx)
 
 r2 <- 0
-while (r2 <= 0.57) {
+n<-0
+while (r2 <= 0.8) {
   # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
   setwd("C:/Users/Felix/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/")
   file =read_excel("Data_1048_Yoga.xlsx")
@@ -24,7 +25,7 @@ while (r2 <= 0.57) {
   head(sample)
   sample<-sample[-1] ## For remove column Class
   
-  res <- dbscan(sample, eps =0.2 , minPts = 5)
+  res <- dbscan(sample, eps =0.05 , minPts = 5)
   res
   pairs(sample, col = res$cluster + 1L)
   sample$cluster<-res$cluster
@@ -97,4 +98,11 @@ while (r2 <= 0.57) {
   # 3. R2 Score
   r2 <- 1 - ss_residuals / ss_total
   print(r2)
+  n <- n +1
+  setwd("C:/Users/Felix/Dropbox/FORESTS2020/Result/CIDANAU")
+  filename = sprintf("%f %d coba.csv", r2,n)
+  # write.xlsx(cleanall, file = filename)
+  write.csv(cleanall, file = filename)
+  ## Feature Selection
+  r2<-r2 +0.1
 }

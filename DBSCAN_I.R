@@ -7,6 +7,7 @@ library(caret)
 library(raster)
 library(dismo)
 library(openxlsx)
+
 # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
 setwd("C:/Users/Felix/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/")
 file =read_excel("Data_1048_Yoga.xlsx")
@@ -27,14 +28,15 @@ sample<-sample[-1] ## For remove column Class
 
 
 head(sample)
-lst <- as.data.frame(lapply(sample, function(x) round((x-min(x))/(max(x)-min(x)), 3))) 
+# lst <- as.data.frame(lapply(sample, function(x) round((x-min(x))/(max(x)-min(x)), 3))) 
+lst <- as.data.frame(lapply(sample, function(x) round(x, 3)))
 head(lst)
 dataSample<- lst
 head(dataSample)
 kNNdistplot(dataSample, k = 5)
-abline(h=0.2, col = "red", lty=2)
+abline(h=0.05, col = "red", lty=2) #----------------- Note
 
-res <- dbscan(dataSample, eps =0.2 , minPts = 5)
+res <- dbscan(dataSample, eps =0.05 , minPts = 5)
 res
 pairs(dataSample, col = res$cluster + 1L)
 dataSample$cluster<-res$cluster
