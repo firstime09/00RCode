@@ -9,21 +9,28 @@ library(dismo)
 library(openxlsx)
 
 r2 <- 0
-n<-0
+n <- 0
 while (r2 <= 0.8) {
   # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
-  setwd("C:/Users/Felix/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/")
-  file =read_excel("Data_1048_Yoga.xlsx")
+  setwd("D:/00RCode/Result/Data Sumatera/")
+  file = read_excel("FRCI_Line_6.xlsx")
   # file =read.csv("FRCI_Line_6.csv")
   head(file)
-  dataall <- file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
-  data<-file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
+  dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+  data<-file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
   head(data)
   
   number <- data %>% group_by(Class) %>% summarize(n())
   sample <- data %>% group_by(Class) %>% sample_n(min(number$`n()`))
   head(sample)
-  sample<-sample[-1] ## For remove column Class
+  sample<-sample[-2] ## For remove column Class
+  
+  lst <- as.data.frame(lapply(sample, function(x) round(x, 3)))
+  head(lst)
+  dataSample <- lst
+  head(dataSample)
+  kNNdistplot(dataSample, k = 5)
+  abline(h=0.05, col = "red", lty=2)
   
   res <- dbscan(sample, eps =0.05 , minPts = 5)
   res
@@ -98,11 +105,11 @@ while (r2 <= 0.8) {
   # 3. R2 Score
   r2 <- 1 - ss_residuals / ss_total
   print(r2)
-  n <- n +1
-  setwd("C:/Users/Felix/Dropbox/FORESTS2020/Result/CIDANAU")
-  filename = sprintf("%f %d coba.csv", r2,n)
+  n <- n + 1
+  setwd("D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/")
+  filename = sprintf("%f %d Sumatera_Line_6.csv", r2, n)
   # write.xlsx(cleanall, file = filename)
   write.csv(cleanall, file = filename)
   ## Feature Selection
-  r2<-r2 +0.1
+  r2 <- r2 + 0.1
 }

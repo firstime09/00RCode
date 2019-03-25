@@ -9,12 +9,12 @@ library(dismo)
 library(openxlsx)
 
 # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
-setwd("C:/Users/Felix/Dropbox/FORESTS2020/00AllData/Dataframe Cidanau/")
-file =read_excel("Data_1048_Yoga.xlsx")
+setwd("D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/")
+file = read_excel("Cidanau_Join_LINE6.xlsx")
 # file =read.csv("FRCI_Line_6.csv")
 head(file)
-dataall <- file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
-data<-file[,-c(1,2,4,6,13)] ## Drop column Band_1 and Band_9 in dataframe
+dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+data<-file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
 head(data)
 
 number <-data %>%
@@ -24,14 +24,14 @@ sample <-data%>%
   group_by(Class)%>%
   sample_n(min(number$`n()`))
 head(sample)
-sample<-sample[-1] ## For remove column Class
+sample<-sample[-2] ## For remove column Class
 
 
 head(sample)
 # lst <- as.data.frame(lapply(sample, function(x) round((x-min(x))/(max(x)-min(x)), 3))) 
 lst <- as.data.frame(lapply(sample, function(x) round(x, 3)))
 head(lst)
-dataSample<- lst
+dataSample <- lst
 head(dataSample)
 kNNdistplot(dataSample, k = 5)
 abline(h=0.05, col = "red", lty=2) #----------------- Note
@@ -45,9 +45,9 @@ par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
 plot(dataSample$Band_4, dataSample$frci)
 
-#setwd('D:/00RCode/Result/Data Sumatera/') #---------------------- After running
-#write.xlsx(cleanall, file = "FRCI_LINE10_45.22.xlsx")
-#write.csv(cleanall, file = "FRCI_LINE10_45.22.csv")
+#setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
+#write.xlsx(cleanall, file = "FRCI_LINE6_57.19.xlsx")
+#write.csv(cleanall, file = "FRCI_LINE6_57.19.csv")
 ## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
