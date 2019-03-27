@@ -25,5 +25,5 @@ min_class <- min(table(new_dataframe$Kelas)) # For to know frekuensi values
 dframe <- new_dataframe %>% group_by(Kelas) %>% sample_n(min_class)
 head(dframe)
 
-setwd('D:/00RCode/Result/')
-write.xlsx(dframe, file = "Pegunungan_Sumatera.xlsx")
+setwd('F:/All Data Forests2020/26032019_Pavilion/FRCI_6_7/')
+write.xlsx(dframe, file = "Data_LINE_6_7_SUMATERA.xlsx")

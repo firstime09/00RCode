@@ -8,47 +8,22 @@ library(raster)
 library(dismo)
 library(openxlsx)
 
-# setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
 setwd("D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/")
-file = read_excel("FRCI_Line_7.xlsx")
-# file =read.csv("FRCI_Line_6.csv")
-head(file)
-dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
-data<-file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
-head(data)
+file1 = read_excel("Cidanau_Join_LINE6_7.xlsx")
+head(file1)
 
-number <-data %>%
-  group_by(Class) %>%
-  summarize(n())
-sample <-data%>%
-  group_by(Class)%>%
-  sample_n(min(number$`n()`))
-head(sample)
-sample<-sample[-2] ## For remove column Class
+kNNdistplot(file1, k = 5)
+abline(h=0.03, col = "red", lty=2)
 
-
-head(sample)
-# lst <- as.data.frame(lapply(sample, function(x) round((x-min(x))/(max(x)-min(x)), 3))) 
-lst <- as.data.frame(lapply(sample, function(x) round(x, 3)))
-head(lst)
-dataSample <- lst
-head(dataSample)
-kNNdistplot(dataSample, k = 5)
-abline(h=0.03, col = "red", lty=2) #----------------- Note
-
-res <- dbscan(dataSample, eps =0.03 , minPts = 5)
+res <- dbscan(file1, eps =0.03, minPts = 5)
 res
-pairs(dataSample, col = res$cluster + 1L)
-dataSample$cluster<-res$cluster
-cleanall<-dataSample %>% filter(cluster > 0)
+pairs(file1, col = res$cluster + 1L)
+file1$cluster <- res$cluster
+cleanall <- file1 %>% filter(cluster > 0)
 par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
-plot(dataSample$Band_4, dataSample$frci)
+plot(file1$Band_4, file1$frci)
 
-# setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
-# write.xlsx(cleanall, file = "FRCI_LINE7_78.13.xlsx")
-# write.csv(cleanall, file = "FRCI_LINE7_78.13.csv")
-## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
 head(svrdata)
@@ -118,3 +93,6 @@ ss_residuals <- sum((df$testing.frci - df$tunedModelY)^2)
 # 3. R2 Score
 r2 <- 1 - ss_residuals / ss_total
 
+# setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
+# write.xlsx(cleanall, file = "Cidanau_Join_LINE6_7_72.15.xlsx")
+# write.csv(cleanall, file = "Cidanau_Join_LINE6_7_72.15.csv")
