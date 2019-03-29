@@ -8,8 +8,8 @@ rMSE <- function(actual, pred, data){
   return(rootMSE)
 }
 
-setwd('D:/GitHub/GitTesis/SVR/Report/')
-loadDF <- read.xlsx('predict_data_analisis.xlsx')
+setwd('D:/GitHub/GitTesis/')
+loadDF <- read.xlsx('LL.xlsx')
 head(loadDF)
 summary(loadDF)
 
