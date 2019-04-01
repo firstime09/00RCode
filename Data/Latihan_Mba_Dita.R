@@ -1,0 +1,11 @@
+# install.packages(c("ggplot2", "burnr"))
+library(openxlsx)
+library(readxl)
+library(dplyr)
+
+setwd('D:/00RCode')
+read_data <- read_xlsx('Latihan_Mba_Dita.xlsx')
+View(read_data)
+head(read_data)
+summary(read_data)
+plot(read_data$Class, read_data$Values)

@@ -9,13 +9,13 @@ library(dismo)
 library(openxlsx)
 
 setwd("D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/")
-file1 = read_excel("Cidanau_Join_LINE6_7.xlsx")
+file1 = read_excel("Cidanau_LINE_6_7_NEW.xlsx")
 head(file1)
 
 kNNdistplot(file1, k = 5)
-abline(h=0.03, col = "red", lty=2)
+abline(h=0.04, col = "red", lty=2)
 
-res <- dbscan(file1, eps =0.03, minPts = 5)
+res <- dbscan(file1, eps =0.04, minPts = 5)
 res
 pairs(file1, col = res$cluster + 1L)
 file1$cluster <- res$cluster
@@ -27,7 +27,7 @@ plot(file1$Band_4, file1$frci)
 svrdata <- cleanall
 svrdata <- cleanall[-8]
 head(svrdata)
-#library(Boruta)
+
 # Decide if a variable is important or not using Boruta
 boruta_output <- Boruta(frci ~ ., data=na.omit(svrdata), doTrace=2)  # perform Boruta search
 boruta_signif <- names(boruta_output$finalDecision[boruta_output$finalDecision %in% ("Confirmed")])  # collect Confirmed and Tentative variables
@@ -35,7 +35,6 @@ print(boruta_signif)  # significant variables
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  # plot variable importance
 
 # Divide data to training and testing ===============================
-
 set.seed(3033)
 intrain <- createDataPartition(y = svrdata$frci, p= 0.7, list = FALSE)
 training <- svrdata[intrain,]
@@ -51,14 +50,11 @@ rmse <- function(error)
 }
 
 # svr model ==============================================
-
 model <- svm(frci ~ . , training)
 predictedY <- predict(model, testing)
 
-
 error <- testing$frci - predictedY  # 
 svrPredictionRMSE <- rmse(error)  #  
-
 
 tuneResult <- tune(svm, frci ~ .,  data = training,
                    ranges = list(epsilon = seq(0,1,0.1), cost = 2^(2:9)))
@@ -71,28 +67,22 @@ tuneResult <- tune(svm, frci ~ .,  data = training,
 tunedModel <- tuneResult$best.model
 tunedModelY <- predict(tunedModel, testing)
 error <- testing$frci - tunedModelY
-tunedModelRMSE <- rmse(error)  # 2.219642
+tunedModelRMSE <- rmse(error)
 
 # 1. 'Actual' and 'Predicted' data
 df <- data.frame(testing$frci, tunedModelY)
-
 # 2. R2 Score components
-
 # 2.1. Average of actual data
 avr_y_actual <- mean(df$testing.frci)
-
 # 2.2. Total sum of squares
 ss_total <- sum((df$testing.frci - avr_y_actual)^2)
-
 # 2.3. Regression sum of squares
 ss_regression <- sum((df$tunedModelY - avr_y_actual)^2)
-
 # 2.4. Residual sum of squares
 ss_residuals <- sum((df$testing.frci - df$tunedModelY)^2)
-
 # 3. R2 Score
 r2 <- 1 - ss_residuals / ss_total
 
-# setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
-# write.xlsx(cleanall, file = "Cidanau_Join_LINE6_7_72.15.xlsx")
-# write.csv(cleanall, file = "Cidanau_Join_LINE6_7_72.15.csv")
+setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
+write.xlsx(cleanall, file = "Cidanau_LINE_6_7_NEW_74.15.xlsx")
+write.csv(cleanall, file = "Cidanau_LINE_6_7_NEW_74.15.csv")
