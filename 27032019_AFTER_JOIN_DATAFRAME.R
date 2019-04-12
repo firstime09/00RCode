@@ -8,10 +8,16 @@ library(raster)
 library(dismo)
 library(openxlsx)
 
-setwd("D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/")
-file1 = read_excel("Cidanau_LINE_6_7_NEW.xlsx")
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
+
+setwd("D:/00RCode/Result/01042019_JOIN_DF_LINE_1.2/")
+file1 = read_excel("CIDANAU_LINE_1_SUMATERA.xlsx")
 head(file1)
 
+file1 <- file1[-8]
 kNNdistplot(file1, k = 5)
 abline(h=0.04, col = "red", lty=2)
 
@@ -44,10 +50,6 @@ dim(training)
 dim(testing)
 anyNA(svrdata)
 ## RMSE
-rmse <- function(error)
-{
-  sqrt(mean(error^2))
-}
 
 # svr model ==============================================
 model <- svm(frci ~ . , training)
@@ -83,6 +85,6 @@ ss_residuals <- sum((df$testing.frci - df$tunedModelY)^2)
 # 3. R2 Score
 r2 <- 1 - ss_residuals / ss_total
 
-setwd('D:/00RCode/Result/Data Sumatera/Data Sumatera No_Normalize/') #---------------------- After running
-write.xlsx(cleanall, file = "Cidanau_LINE_6_7_NEW_74.15.xlsx")
-write.csv(cleanall, file = "Cidanau_LINE_6_7_NEW_74.15.csv")
+setwd('D:/00RCode/Result/01042019_JOIN_DF_LINE_1.2/') #---------------------- After running
+write.xlsx(cleanall, file = "CIDANAU_LINE_1_SUMATERA_65_17.xlsx")
+# write.csv(cleanall, file = "Cidanau_LINE_6_7_NEW_74.15.csv")
