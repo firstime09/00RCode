@@ -9,25 +9,20 @@ library(dismo)
 library(openxlsx)
 
 # setwd("C:/Users/user/Dropbox/FORESTS2020/00AllData/Dataframe Sumatra/Data FRCI Window Area_Malta/")
-setwd("D:/TIFF DATA/New DataFrame/Sumatera 15052019/SHP/WA_Line_1_2/WA_Line_1_2_Sebelum")
-file = read_excel("WA_Line_1_2_Sebelum_SMT.xlsx")
+setwd("D:/TIFF DATA/New DataFrame/Sumatera 15052019/SHP/WINDOW AREA/")
+file = read_excel("WA_Line_14_15_Sesudah_SMT.xlsx")
 # file =read.csv("FRCI_Line_6.csv")
 head(file)
-dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
-data <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
-head(data)
-data <- file
+# dataall <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+# data <- file[,-c(3,10)] ## Drop column Band_1 and Band_9 in dataframe
+# head(data)
 
-number <- data %>%
-  group_by(Class) %>%
-  summarize(n())
-sample <- data%>%
-  group_by(Class)%>%
-  sample_n(min(number$`n()`))
+number <- file %>% group_by(Class) %>% summarize(n())
+sample <- file %>% group_by(Class) %>% sample_n(min(number$`n()`))
 head(sample)
-sample <- sample[-2] ## For remove column Class
+sample <- sample[-c(2)] ## For remove column Class and kategori
+head(sample)
 
-head(sample)
 # lst <- as.data.frame(lapply(sample, function(x) round((x-min(x))/(max(x)-min(x)), 3))) 
 lst <- as.data.frame(lapply(sample, function(x) round(x, 3)))
 head(lst)
@@ -35,9 +30,9 @@ dataSample <- lst
 head(dataSample)
 kNNdistplot(dataSample, k = 5)
 
-change_data <- 0.04
-abline(h = change_data, col = "red", lty = 2) #----------------- Note
-res <- dbscan(dataSample, eps = change_data, minPts = 5)
+hight_dist <- 0.0375 ##------------------------------------------ Note
+abline(h = hight_dist, col = "red", lty = 2)
+res <- dbscan(dataSample, eps = hight_dist , minPts = 5)
 res
 pairs(dataSample, col = res$cluster + 1L)
 dataSample$cluster <- res$cluster
@@ -46,9 +41,6 @@ par(mfrow=c(1,2))
 plot(cleanall$Band_4, cleanall$frci)
 plot(dataSample$Band_4, dataSample$frci)
 
-setwd("D:/TIFF DATA/New DataFrame/Sumatera 15052019/SHP/WA_Line_1_2/WA_Line_1_2_Sebelum") #---------------------- After running
-write.xlsx(cleanall, file = "WA_Line_1_2_Sebelum_SMT_78.13.xlsx")
-# write.csv(cleanall, file = "FRCI_LINE7_78.13.csv")
 ## Feature Selection
 svrdata <- cleanall
 svrdata <- cleanall[-8]
@@ -96,26 +88,30 @@ tuneResult <- tune(svm, frci5m ~ .,  data = training,
 
 tunedModel <- tuneResult$best.model
 tunedModelY <- predict(tunedModel, testing)
+
+hasilstat <- testing
+hasilstat$predict <- tunedModelY
+hasilstat
+
 error <- testing$frci - tunedModelY
 tunedModelRMSE <- rmse(error)  # 2.219642
 
 # 1. 'Actual' and 'Predicted' data
 df <- data.frame(testing$frci, tunedModelY)
-
 # 2. R2 Score components
-
 # 2.1. Average of actual data
 avr_y_actual <- mean(df$testing.frci)
-
 # 2.2. Total sum of squares
 ss_total <- sum((df$testing.frci - avr_y_actual)^2)
-
 # 2.3. Regression sum of squares
 ss_regression <- sum((df$tunedModelY - avr_y_actual)^2)
-
 # 2.4. Residual sum of squares
 ss_residuals <- sum((df$testing.frci - df$tunedModelY)^2)
-
 # 3. R2 Score
 r2 <- 1 - ss_residuals / ss_total
 
+
+# setwd('D:/TIFF DATA/New DataFrame/Cidanau 13052019/') #---------------------- After running
+write.xlsx(cleanall, file = "WA_Line_14_15_Sebelum_SMT_HASIL.xlsx")
+write.xlsx(hasilstat, file = "WA_Line_14_15_Sebelum_SMT_42_22.xlsx")
+# write.csv(cleanall, file = "FRCI_LINE7_78.13.csv")
