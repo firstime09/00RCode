@@ -53,7 +53,6 @@ print(boruta_signif)  # significant variables
 plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  # plot variable importance
 
 # Divide data to training and testing ===============================
-
 set.seed(3033)
 intrain <- createDataPartition(y = svrdata$frci, p= 0.7, list = FALSE)
 training <- svrdata[intrain,]
@@ -112,6 +111,6 @@ r2 <- 1 - ss_residuals / ss_total
 
 
 # setwd('D:/TIFF DATA/New DataFrame/Cidanau 13052019/') #---------------------- After running
-write.xlsx(cleanall, file = "WA_Line_14_15_Sebelum_SMT_HASIL.xlsx")
-write.xlsx(hasilstat, file = "WA_Line_14_15_Sebelum_SMT_42_22.xlsx")
+write.xlsx(cleanall, file = "WA_Line_14_15_Sesudah_SMT_HASIL.xlsx")
+write.xlsx(hasilstat, file = "WA_Line_14_15_Sesudah_SMT_58_19.xlsx")
 # write.csv(cleanall, file = "FRCI_LINE7_78.13.csv")
