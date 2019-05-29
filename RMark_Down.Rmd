@@ -1,0 +1,40 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+# Canopy Cover Prediction using Support Vector Machine
+### by Felliks F Tampinongkol
+
+**Part 1 - Load Library R**
+```{r}
+library(openxlsx)
+library(dbscan)
+library(readxl)
+library(e1071)
+library(dplyr)
+library(dismo)
+library(caret)
+library(Boruta)
+library(raster)
+
+# Fungsi RMSE (Root Mean Square Error)
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
+```
+**Part 2 - Set dir and Load Data**
+```{r}
+# Set lokasi direktory dari data yang akan diload
+# Data yang digunakan merupakan data dengan format ".xlsx"
+setwd("D:/00RCode/Result/01042019_JOIN_DF_LINE_1.2/")
+load_data <- read_excel("CIDANAU_LINE_1_SUMATERA_65_17.xlsx")
+head(load_data)
+```
+**Part 3 - Processing Data using DBSCAN**
+```{r}
+# Remove Column yang tidak digunakan
+load_data <- load_data[-8]
+head(load_data)
+```
