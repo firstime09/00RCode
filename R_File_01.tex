@@ -1,0 +1,389 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Pre-Processing Data},
+            pdfauthor={Felliks F Tampinongkol, Sahid A Hudjimartsu, Lilik B Prasetyo dan Yudi Setiawan},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Pre-Processing Data}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Felliks F Tampinongkol, Sahid A Hudjimartsu, Lilik B Prasetyo dan Yudi
+Setiawan}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{Selasa / 01 Oktober 2019}
+
+
+\begin{document}
+\maketitle
+
+\subsection{Pre-Processing Data LiDAR dan Landsat 8 OLI using Support
+Vector Regression
+(SVR)}\label{pre-processing-data-lidar-dan-landsat-8-oli-using-support-vector-regression-svr}
+
+Data Canopy Cover yang digunakan dapat didownload pada Folder
+``\ldots{}'' Berikut merupakan package yang digunakan dalam
+pre-processing data menggunakan RStudio:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# install.packages(c("packages_name"))}
+\CommentTok{# library(dbscan, readxl, dplyr, e1071, Boruta, dismo, caret, raster, openxlsx)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Langkah 1 - Set lokasi penyimpanan dan load file
+excel}\label{langkah-1---set-lokasi-penyimpanan-dan-load-file-excel}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(openxlsx)}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{'C:/Users/Felix/Dropbox/FORESTS2020/00AllData/'}\NormalTok{)}
+\NormalTok{load_data <-}\StringTok{ }\KeywordTok{read.xlsx}\NormalTok{(}\StringTok{"Data Canopy Cover.xlsx"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(load_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   FID Shape Class      kategori frci   Band_1   Band_2   Band_3   Band_4
+## 1 544 Point     1 Sangat Rendah    0 0.119028 0.096263 0.088627 0.067901
+## 2 684 Point     1 Sangat Rendah    0 0.113155 0.089109 0.072956 0.050277
+## 3 686 Point     1 Sangat Rendah    0 0.124964 0.104814 0.095479 0.100075
+## 4 723 Point     1 Sangat Rendah    0 0.120681 0.099382 0.089137 0.079335
+## 5 739 Point     1 Sangat Rendah    0 0.113995 0.090231 0.077047 0.051841
+## 6 742 Point     1 Sangat Rendah    0 0.114693 0.091302 0.083048 0.052883
+##     Band_5   Band_6   Band_7   Band_9
+## 1 0.356388 0.246095 0.124561 0.001402
+## 2 0.299869 0.164176 0.080432 0.001548
+## 3 0.237620 0.215206 0.135871 0.001697
+## 4 0.288038 0.236145 0.133857 0.001737
+## 5 0.352246 0.195241 0.088700 0.001420
+## 6 0.381807 0.207427 0.092613 0.001679
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(load_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       FID            Shape               Class         kategori        
+##  Min.   :   0.0   Length:1047        Min.   : 1.00   Length:1047       
+##  1st Qu.: 261.5   Class :character   1st Qu.: 4.00   Class :character  
+##  Median : 523.0   Mode  :character   Median : 7.00   Mode  :character  
+##  Mean   : 523.0                      Mean   : 6.18                     
+##  3rd Qu.: 784.5                      3rd Qu.: 9.00                     
+##  Max.   :1046.0                      Max.   :10.00                     
+##       frci            Band_1           Band_2            Band_3       
+##  Min.   :0.0000   Min.   :0.1051   Min.   :0.08066   Min.   :0.06139  
+##  1st Qu.:0.3355   1st Qu.:0.1112   1st Qu.:0.08642   1st Qu.:0.06958  
+##  Median :0.6408   Median :0.1143   Median :0.08960   Median :0.07287  
+##  Mean   :0.5680   Mean   :0.1139   Mean   :0.08948   Mean   :0.07382  
+##  3rd Qu.:0.8128   3rd Qu.:0.1162   3rd Qu.:0.09168   3rd Qu.:0.07679  
+##  Max.   :1.0000   Max.   :0.1360   Max.   :0.11716   Max.   :0.09990  
+##      Band_4            Band_5           Band_6            Band_7       
+##  Min.   :0.03673   Min.   :0.1778   Min.   :0.08948   Min.   :0.03179  
+##  1st Qu.:0.04273   1st Qu.:0.2993   1st Qu.:0.13215   1st Qu.:0.05226  
+##  Median :0.04547   Median :0.3253   Median :0.15375   Median :0.06280  
+##  Mean   :0.04873   Mean   :0.3236   Mean   :0.15736   Mean   :0.06931  
+##  3rd Qu.:0.05039   3rd Qu.:0.3508   3rd Qu.:0.17137   3rd Qu.:0.07383  
+##  Max.   :0.10473   Max.   :0.4551   Max.   :0.29533   Max.   :0.21130  
+##      Band_9        
+##  Min.   :0.000918  
+##  1st Qu.:0.001532  
+##  Median :0.001736  
+##  Mean   :0.001762  
+##  3rd Qu.:0.001960  
+##  Max.   :0.002959
+\end{verbatim}
+
+\subsection{Langkah 2 - Sleksi dan Balencing
+Data}\label{langkah-2---sleksi-dan-balencing-data}
+
+Setelah data file berhasil diload selanjutnya data dipilih sesuai dengan
+kebutuhan. Dalam kasus ini atribut data yang akan digunakan adalah
+(``Class, frci dan Band\_2 sampai Band\_7''). Kemudian data yang telah
+dipilih berdasarkan atribut dilakukan balancing berdasarkan jumlah Class
+yang memiliki nilai frekuensi terkecil. Tahapan seleksi dan balancing
+data sebagai berikut:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Tahapan seleksi dan Balancing Data}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data <-}\StringTok{ }\NormalTok{load_data[, }\KeywordTok{c}\NormalTok{(}\StringTok{"Class"}\NormalTok{, }\StringTok{"frci"}\NormalTok{, }\StringTok{"Band_2"}\NormalTok{, }\StringTok{"Band_3"}\NormalTok{,}
+                      \StringTok{"Band_4"}\NormalTok{, }\StringTok{"Band_5"}\NormalTok{, }\StringTok{"Band_6"}\NormalTok{, }\StringTok{"Band_7"}\NormalTok{)]}
+\NormalTok{number <-}\StringTok{ }\NormalTok{data }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(Class) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\KeywordTok{n}\NormalTok{())}
+\NormalTok{sample <-}\StringTok{ }\NormalTok{data }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(Class) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{sample_n}\NormalTok{(}\KeywordTok{min}\NormalTok{(number}\OperatorTok{$}\StringTok{`}\DataTypeTok{n()}\StringTok{`}\NormalTok{))}
+\KeywordTok{head}\NormalTok{(sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 8
+## # Groups:   Class [1]
+##   Class   frci Band_2 Band_3 Band_4 Band_5 Band_6 Band_7
+##   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1     1 0.0151 0.0942 0.0860 0.0637  0.362  0.244 0.124 
+## 2     1 0.0783 0.105  0.0964 0.0964  0.249  0.227 0.139 
+## 3     1 0.0405 0.0901 0.0781 0.0547  0.324  0.186 0.0905
+## 4     1 0.0396 0.0963 0.0892 0.0684  0.341  0.254 0.132 
+## 5     1 0.0649 0.0899 0.0750 0.0518  0.289  0.184 0.0870
+## 6     1 0.0580 0.0975 0.0801 0.0735  0.238  0.231 0.150
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample <-}\StringTok{ }\NormalTok{sample[}\OperatorTok{-}\DecValTok{1}\NormalTok{] ## Hapus column Class}
+\KeywordTok{head}\NormalTok{(sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 7
+##     frci Band_2 Band_3 Band_4 Band_5 Band_6 Band_7
+##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+## 1 0.0151 0.0942 0.0860 0.0637  0.362  0.244 0.124 
+## 2 0.0783 0.105  0.0964 0.0964  0.249  0.227 0.139 
+## 3 0.0405 0.0901 0.0781 0.0547  0.324  0.186 0.0905
+## 4 0.0396 0.0963 0.0892 0.0684  0.341  0.254 0.132 
+## 5 0.0649 0.0899 0.0750 0.0518  0.289  0.184 0.0870
+## 6 0.0580 0.0975 0.0801 0.0735  0.238  0.231 0.150
+\end{verbatim}
+
+\subsection{Langkah 3 - Menghapus Data Pencilan Menggunakan
+DBSCAN}\label{langkah-3---menghapus-data-pencilan-menggunakan-dbscan}
+
+Data yang telah diproses dalam Langkah 2, selanjutnya dilakukan
+pembulatan 3 angka dibelakang koma dan proses membuang outlier atau data
+pencilan menggunakan algoritma DBSCAN. Proses dapat dilihat seperti
+dibawah ini:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Proses pembulatan 3 Angka dibelakang koma
+\item
+  Menentukan nilai epsilon untuk menghapus data pencilan
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(dbscan)}
+\NormalTok{lst <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{lapply}\NormalTok{(sample, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{round}\NormalTok{(x, }\DecValTok{3}\NormalTok{)))}
+\KeywordTok{head}\NormalTok{(lst)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    frci Band_2 Band_3 Band_4 Band_5 Band_6 Band_7
+## 1 0.015  0.094  0.086  0.064  0.362  0.244  0.124
+## 2 0.078  0.105  0.096  0.096  0.249  0.227  0.139
+## 3 0.041  0.090  0.078  0.055  0.324  0.186  0.091
+## 4 0.040  0.096  0.089  0.068  0.341  0.254  0.132
+## 5 0.065  0.090  0.075  0.052  0.289  0.184  0.087
+## 6 0.058  0.098  0.080  0.074  0.238  0.231  0.150
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataSample <-}\StringTok{ }\NormalTok{lst}
+\KeywordTok{head}\NormalTok{(dataSample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    frci Band_2 Band_3 Band_4 Band_5 Band_6 Band_7
+## 1 0.015  0.094  0.086  0.064  0.362  0.244  0.124
+## 2 0.078  0.105  0.096  0.096  0.249  0.227  0.139
+## 3 0.041  0.090  0.078  0.055  0.324  0.186  0.091
+## 4 0.040  0.096  0.089  0.068  0.341  0.254  0.132
+## 5 0.065  0.090  0.075  0.052  0.289  0.184  0.087
+## 6 0.058  0.098  0.080  0.074  0.238  0.231  0.150
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Nilai Epsilon yang digunakan 0.045}
+\KeywordTok{kNNdistplot}\NormalTok{(dataSample, }\DataTypeTok{k =} \DecValTok{5}\NormalTok{)}
+\NormalTok{change_data <-}\StringTok{ }\FloatTok{0.045}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h =}\NormalTok{ change_data, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R_File_01_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res <-}\StringTok{ }\KeywordTok{dbscan}\NormalTok{(dataSample, }\DataTypeTok{eps =}\NormalTok{ change_data, }\DataTypeTok{minPts =} \DecValTok{5}\NormalTok{)}
+\CommentTok{# Ploting sebaran data FRCI terhadap nilai Band Reflektan}
+\KeywordTok{pairs}\NormalTok{(dataSample, }\DataTypeTok{col =}\NormalTok{ res}\OperatorTok{$}\NormalTok{cluster }\OperatorTok{+}\StringTok{ }\NormalTok{1L)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R_File_01_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+Dalam proses ini kita telah memperoleh new data frame (``cleanall'')
+yang kita angap bebas dari outlier atau data pencilan, sehingga data
+frame inilah yang akan digunakan untuk proses membuat model menggunakan
+SVR.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataSample}\OperatorTok{$}\NormalTok{cluster <-}\StringTok{ }\NormalTok{res}\OperatorTok{$}\NormalTok{cluster}
+\NormalTok{cleanall <-}\StringTok{ }\NormalTok{dataSample }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(cluster }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{)}
+
+\CommentTok{# Ploting data sebelum dan sesudah dihapus outlier}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(dataSample}\OperatorTok{$}\NormalTok{Band_}\DecValTok{4}\NormalTok{, dataSample}\OperatorTok{$}\NormalTok{frci, }\DataTypeTok{xlab =} \StringTok{'Band 4 Reflektan'}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{'Nilai FRCI'}\NormalTok{, }\DataTypeTok{main =} \StringTok{'Sebelum'}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(cleanall}\OperatorTok{$}\NormalTok{Band_}\DecValTok{4}\NormalTok{, cleanall}\OperatorTok{$}\NormalTok{frci, }\DataTypeTok{xlab =} \StringTok{'Band 4 Reflektan'}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{'Nilai FRCI'}\NormalTok{, }\DataTypeTok{main =} \StringTok{'Sesudah'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{R_File_01_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+
+\end{document}

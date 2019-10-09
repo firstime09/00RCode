@@ -32,6 +32,4 @@ colnames(new_df)[which(names(new_df) == "b6_L8_CIDA")] <- "Band_6"
 colnames(new_df)[which(names(new_df) == "b7_L8_CIDA")] <- "Band_7"
 View(new_df)
 
-
-
 savefile <- write.xlsx(new_df, file = 'CIDANAU_NEW.xlsx')

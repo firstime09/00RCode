@@ -5,25 +5,29 @@ library(dplyr)
 library(readxl)
 library(openxlsx)
 
-setwd('D:/TIFF DATA/[28-05-2019] All Data/SUMSEL/YOGA/(-6) Sebelum/')
-load_shpfile <- shapefile("WA_LINE_14_15_SEBELUM.shp")
+setwd('E:/Data_Landsat8_Metric_2018_Sum/E104S02/TOA_FILE/New folder/')
+# load_shpfile <- shapefile("FRCI_Line_7.shp")
+load_shpfile <- read_xlsx('CIDANAU_LINE6_BALANCE_160719.xlsx')
 shp_2_df <- data.frame(load_shpfile)
+# shp_2_df <- load_shpfile
 head(shp_2_df)
 
-# select_df <- shp_2_df[, c("frci_5m", "Kelas", "b2_L8_SMT_", "b3_L8_SMT_", "b4_L8_SMT_",
-#                           "b5_L8_SMT_", "b6_L8_SMT_", "b7_L8_SMT_")]
+select_df <- shp_2_df[, c("frci_5m", "Kelas", "B2corr", "B3corr", "B4corr",
+                          "B5corr", "B6corr", "B7corr")]
 
-select_df <- shp_2_df[, c("frci5m", "Class", "b2_SBL_L8_", "b3_SBL_L8_", "b4_SBL_L8_",
-                          "b5_SBL_L8_", "b6_SBL_L8_", "b7_SBL_L8_")]
+# select_df <- shp_2_df[, c("frci_5m", "kelas", "B2corr", "B3corr", "B4corr",
+#                           "B5corr", "B6corr", "B7corr")]
 
-colnames(select_df)[which(names(select_df) == "Class")] <- "Class"
-colnames(select_df)[which(names(select_df) == "b2_SBL_L8_")] <- "Band_2"
-colnames(select_df)[which(names(select_df) == "b3_SBL_L8_")] <- "Band_3"
-colnames(select_df)[which(names(select_df) == "b4_SBL_L8_")] <- "Band_4"
-colnames(select_df)[which(names(select_df) == "b5_SBL_L8_")] <- "Band_5"
-colnames(select_df)[which(names(select_df) == "b6_SBL_L8_")] <- "Band_6"
-colnames(select_df)[which(names(select_df) == "b7_SBL_L8_")] <- "Band_7"
+colnames(select_df)[which(names(select_df) == "frci_5m")] <- "frci5m"
+colnames(select_df)[which(names(select_df) == "Kelas")] <- "Class"
+colnames(select_df)[which(names(select_df) == "B2corr")] <- "Band_2"
+colnames(select_df)[which(names(select_df) == "B3corr")] <- "Band_3"
+colnames(select_df)[which(names(select_df) == "B4corr")] <- "Band_4"
+colnames(select_df)[which(names(select_df) == "B5corr")] <- "Band_5"
+colnames(select_df)[which(names(select_df) == "B6corr")] <- "Band_6"
+colnames(select_df)[which(names(select_df) == "B7corr")] <- "Band_7"
 head(select_df)
+
 
 number <- select_df %>% group_by(Class) %>% summarize(n())
 number
@@ -31,5 +35,5 @@ sample <- select_df %>% group_by(Class) %>% sample_n(min(number$`n()`))
 min(table(sample$Class))
 
 head(sample)
-savefile <- write.xlsx(select_df, file = 'SEBELUM_DATA_LINE_14_15_SUMSEL.xlsx')
-savefile <- write.xlsx(sample, file = 'SEBELUM_LINE_14_15_SUMSEL_BALANCE.xlsx')
+savefile <- write.xlsx(select_df, file = 'Data_LINE6_160719.xlsx')
+savefile <- write.xlsx(sample, file = 'Data_LINE7_160719_BALANCE.xlsx')

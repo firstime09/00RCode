@@ -1,4 +1,4 @@
-library(dbscan)
+library(dbscan) ## 
 library(readxl)
 library(dplyr)
 library(e1071)
@@ -14,7 +14,7 @@ rmse <- function(error)
 }
 
 setwd("D:/00RCode/Result/01042019_JOIN_DF_LINE_1.2/")
-file1 = read_excel("CIDANAU_LINE_1_SUMATERA.xlsx")
+file1 = read_excel("CIDANAU_LINE_1_SUMATERA_65_17.xlsx")
 head(file1)
 
 file1 <- file1[-8]
